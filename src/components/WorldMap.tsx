@@ -54,6 +54,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }:
       case 'gate': return 'bg-primary/80';
       case 'gate_fragment': return 'bg-blue-600/80';
       case 'supplies': return 'bg-blue-500/80';
+      case 'zpm': return 'bg-yellow-500/80';
       default: return shouldShowBiomeColor ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
     }
   };
@@ -139,6 +140,9 @@ export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }:
         </div>
         <div className="flex items-center gap-1">
           <span>📦</span> Supplies
+        </div>
+        <div className="flex items-center gap-1">
+          <span>⚡</span> ZPM
         </div>
         <div className="flex items-center gap-1">
           <span>🏛️</span> Ruins
