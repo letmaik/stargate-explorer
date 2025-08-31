@@ -82,8 +82,6 @@ export function StargateControl({
       
       {/* Gate Addresses */}
       <div className="space-y-3">
-        <h3 className="font-semibold">Available Destinations</h3>
-        
         <div className="space-y-2">
           {addresses.map((address) => {
             const canDial = address.id === 'atlantis' ? 

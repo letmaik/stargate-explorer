@@ -33,9 +33,7 @@ export function WorldMap({ world, address, playerPosition, gameState, onMove, on
         onInteract(playerPosition);
         break;
       case 'y':
-        console.log('=== STARGATE EXPLORER GAME STATE DUMP ===');
-        console.log(JSON.stringify(gameState, null, 2));
-        console.log('=== END GAME STATE DUMP ===');
+        console.log(gameState);
         break;
       case '=':
         onCheat?.('unlock_world');
@@ -87,7 +85,7 @@ export function WorldMap({ world, address, playerPosition, gameState, onMove, on
           )}
         </div>
         <div className="text-xs text-muted-foreground">
-          Use WASD to move, E to interact, Y to dump state
+          Use WASD to move, E to interact
         </div>
       </div>
       <div 
