@@ -10,6 +10,8 @@ const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Use relative paths in production builds so the app can be hosted from any subfolder.
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
