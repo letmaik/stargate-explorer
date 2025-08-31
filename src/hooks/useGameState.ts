@@ -332,11 +332,77 @@ export function useGameState() {
     });
   }, [setGameState]);
 
+  const handleCheat = useCallback((cheatCode: string) => {
+    setGameState((current) => {
+      switch (cheatCode) {
+        case 'unlock_world': {
+          const nextLevel = Object.keys(current.worlds).length + 1;
+          
+          // Only unlock if not at max worlds and haven't unlocked Atlantis yet
+          if (nextLevel <= 6) {
+            const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
+            
+            const newAddresses = [...current.addresses, newAddress];
+            const updatedWorlds = {
+              ...current.worlds,
+              [newAddress.id]: newWorld
+            };
+            
+            toast.success(`🎮 DEBUG: Unlocked ${newAddress.name}!`);
+            
+            // If this was the 5th world (level 6), also unlock Atlantis
+            if (nextLevel === 6) {
+              const atlantisAddress = {
+                id: 'atlantis',
+                name: 'Atlantis',
+                symbols: ['🌊', '🏛️', '🔱', '💎', '⚡', '🌌', '🔮', '🌟'],
+                discovered: true,
+                isEightChevron: true
+              };
+              newAddresses.push(atlantisAddress);
+              toast.success('🎮 DEBUG: Atlantis unlocked!');
+            }
+            
+            return {
+              ...current,
+              addresses: newAddresses,
+              worlds: updatedWorlds,
+              currentLevel: nextLevel
+            };
+          } else {
+            toast.info('🎮 DEBUG: All worlds already unlocked!');
+            return current;
+          }
+        }
+        
+        case 'collect_zpm': {
+          if (!current.player.hasZPM) {
+            toast.success('🎮 DEBUG: ZPM collected!');
+            return {
+              ...current,
+              player: {
+                ...current.player,
+                hasZPM: true
+              }
+            };
+          } else {
+            toast.info('🎮 DEBUG: ZPM already collected!');
+            return current;
+          }
+        }
+        
+        default:
+          return current;
+      }
+    });
+  }, [setGameState]);
+
   return {
     gameState,
     movePlayer,
     travelToWorld,
     interactWithTile,
-    resetGame
+    resetGame,
+    handleCheat
   };
 }

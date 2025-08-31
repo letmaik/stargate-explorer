@@ -12,14 +12,15 @@ function App() {
     movePlayer,
     travelToWorld,
     interactWithTile,
-    resetGame
+    resetGame,
+    handleCheat
   } = useGameState();
 
   const currentWorld = gameState.currentWorld ? gameState.worlds[gameState.currentWorld] : null;
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
         <Card className="p-6">
           <div className="flex items-center justify-between">
@@ -35,7 +36,7 @@ function App() {
           </div>
         </Card>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4">
           {/* Stargate Control Panel */}
           <div className="lg:col-span-1">
             <StargateControl
@@ -55,6 +56,7 @@ function App() {
                 playerPosition={gameState.player.position}
                 onMove={movePlayer}
                 onInteract={interactWithTile}
+                onCheat={handleCheat}
               />
             ) : (
               <Card className="p-12 text-center">

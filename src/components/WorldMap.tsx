@@ -9,9 +9,10 @@ interface WorldMapProps {
   playerPosition: Position;
   onMove: (direction: Position) => void;
   onInteract: (position: Position) => void;
+  onCheat?: (cheatCode: string) => void;
 }
 
-export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMapProps) {
+export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }: WorldMapProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.key.toLowerCase()) {
       case 'w':
@@ -29,6 +30,12 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
       case 'e':
       case ' ':
         onInteract(playerPosition);
+        break;
+      case '=':
+        onCheat?.('unlock_world');
+        break;
+      case '-':
+        onCheat?.('collect_zpm');
         break;
     }
   };
@@ -62,7 +69,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
   };
 
   return (
-    <Card className="p-4 space-y-4">
+    <Card className="p-3 space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
@@ -76,7 +83,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
       </div>
       
       <div 
-        className="relative bg-background border border-border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        className="relative bg-background border border-border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-primary"
         tabIndex={0}
         onKeyDown={handleKeyPress}
       >
