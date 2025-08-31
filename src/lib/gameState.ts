@@ -42,8 +42,8 @@ export function generateNewWorld(level: number): { world: any; address: GateAddr
   const worldTemplates = [
     { biome: 'jungle' as const, name: 'Chulak', symbols: ['🌿', '🐍', '🦋', '🌺', '🌳', '💧'] },
     { biome: 'desert' as const, name: 'Abydos', symbols: ['🏜️', '🦂', '🌵', '🔥', '💎', '🏺'] },
-    { biome: 'arctic' as const, name: 'Hoth Prime', symbols: ['❄️', '🐧', '⛄', '🧊', '🌨️', '🏔️'] },
-    { biome: 'volcanic' as const, name: 'Netu', symbols: ['🌋', '🔥', '💀', '⚡', '🌪️', '🗿'] },
+    { biome: 'arctic' as const, name: 'Kallana', symbols: ['❄️', '🐧', '⛄', '🧊', '🌨️', '🏔️'] },
+    { biome: 'volcanic' as const, name: 'Aschen', symbols: ['🌋', '🔥', '💀', '⚡', '🌪️', '🗿'] },
     { biome: 'alien_city' as const, name: 'Atlantis', symbols: ['🏛️', '👽', '🛸', '🔮', '⚡', '🌌'] }
   ];
   
