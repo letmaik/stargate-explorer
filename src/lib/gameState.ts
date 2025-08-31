@@ -2,12 +2,12 @@ import { GameState, GateAddress } from './types';
 import { generateWorld } from './worldGenerator';
 
 export function createInitialGameState(): GameState {
-  const earthWorld = generateWorld('earth', 'Earth (P3X-774)', 'earth', 1);
+  const earthWorld = generateWorld('earth', 'Earth', 'earth', 1);
   
   const initialAddresses: GateAddress[] = [
     {
       id: 'earth',
-      name: 'Earth (P3X-774)',
+      name: 'Earth',
       symbols: ['🌍', '🌊', '🌱', '🌤️', '🏔️', '🌋'],
       discovered: true
     }
@@ -44,22 +44,11 @@ export function generateNewWorld(level: number): { world: any; address: GateAddr
   const template = worldTemplates[Math.min(level - 2, worldTemplates.length - 1)];
   const worldId = `world_${level}_${Date.now()}`;
   
-  // Generate random gate address in P8X-XXX format
-  const generateGateAddress = () => {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
-    const letter = letters[Math.floor(Math.random() * letters.length)];
-    const digit = numbers[Math.floor(Math.random() * numbers.length)];
-    const threeDigits = Array.from({ length: 3 }, () => numbers[Math.floor(Math.random() * numbers.length)]).join('');
-    return `P${digit}${letter}-${threeDigits}`;
-  };
-  
-  const gateAddress = generateGateAddress();
-  const world = generateWorld(worldId, `${template.name} (${gateAddress})`, template.biome, level);
+  const world = generateWorld(worldId, template.name, template.biome, level);
   
   const address: GateAddress = {
     id: worldId,
-    name: world.name,
+    name: template.name,
     symbols: template.symbols,
     discovered: false
   };
