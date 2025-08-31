@@ -17,6 +17,7 @@ function App() {
   } = useGameState();
 
   const currentWorld = gameState.currentWorld ? gameState.worlds[gameState.currentWorld] : null;
+  const currentAddress = gameState.currentWorld ? gameState.addresses.find(addr => addr.id === gameState.currentWorld) : null;
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4">
@@ -53,6 +54,7 @@ function App() {
             {currentWorld ? (
               <WorldMap
                 world={currentWorld}
+                address={currentAddress}
                 playerPosition={gameState.player.position}
                 onMove={movePlayer}
                 onInteract={interactWithTile}

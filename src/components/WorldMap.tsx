@@ -1,17 +1,18 @@
-import { World, Position, TileType } from '@/lib/types';
+import { World, Position, TileType, GateAddress } from '@/lib/types';
 import { getTileEmoji, getBiomeExploredColor } from '@/lib/worldGenerator';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface WorldMapProps {
   world: World;
+  address?: GateAddress | null;
   playerPosition: Position;
   onMove: (direction: Position) => void;
   onInteract: (position: Position) => void;
   onCheat?: (cheatCode: string) => void;
 }
 
-export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }: WorldMapProps) {
+export function WorldMap({ world, address, playerPosition, onMove, onInteract, onCheat }: WorldMapProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.key.toLowerCase()) {
       case 'w':
@@ -73,6 +74,11 @@ export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }:
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
+          {address && (
+            <div className="text-sm text-muted-foreground stargate-symbols">
+              {address.symbols.join(' ')}
+            </div>
+          )}
         </div>
         <div className="text-xs text-muted-foreground">
           Use WASD to move, E to interact
