@@ -130,10 +130,12 @@ export function useGameState() {
           toast.success('Gate fragment collected!');
           targetTile.type = 'empty'; // Remove fragment from world
           
-          // Check if we can generate a new address (but stop generating after reaching all worlds)
+          // Check if we can generate a new address
           if (newFragments >= 3) {
             const nextLevel = Object.keys(current.worlds).length + 1;
-            if (nextLevel <= 6) { // Only generate up to 5 new worlds
+            
+            // Generate regular worlds up to level 6 (5 new worlds)
+            if (nextLevel <= 6) {
               const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
               
               // Add the new address and world
@@ -142,8 +144,21 @@ export function useGameState() {
               newFragments = 0; // Reset fragments
               levelUp = true;
               toast.success(`New address discovered: ${newAddress.name}`);
+              
+              // If this was the 5th world (level 6), also unlock Atlantis
+              if (nextLevel === 6) {
+                const atlantisAddress = {
+                  id: 'atlantis',
+                  name: 'Atlantis',
+                  symbols: ['🌊', '🏛️', '🔱', '💎', '⚡', '🌌', '🔮', '🌟'],
+                  discovered: true,
+                  isEightChevron: true
+                };
+                newAddresses = [...newAddresses, atlantisAddress];
+                toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
+              }
             }
-            // If max worlds reached, don't reset fragments but don't use them either
+            // If max regular worlds reached, don't reset fragments but don't use them either
           }
           break;
           

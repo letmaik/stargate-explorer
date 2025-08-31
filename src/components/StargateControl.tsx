@@ -67,16 +67,28 @@ export function StargateControl({
         </div>
         
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center justify-center gap-2">
-            <Scroll size={16} />
-            <span className="text-sm">Gate Fragments: {player.gateFragments}</span>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm">
+              <Scroll size={16} />
+              <span>Gate Fragments</span>
+            </div>
+            <div className="text-center">
+              <Badge variant="secondary" className="text-accent">
+                {player.gateFragments}
+              </Badge>
+            </div>
           </div>
           
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-sm">ZPM: </span>
-            <Badge variant={player.hasZPM ? "default" : "secondary"} className={player.hasZPM ? "bg-accent text-accent-foreground" : ""}>
-              {player.hasZPM ? "⚡ Ready" : "❌ Missing"}
-            </Badge>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm">
+              <span>⚡</span>
+              <span>ZPM</span>
+            </div>
+            <div className="text-center">
+              <Badge variant={player.hasZPM ? "default" : "secondary"} className={player.hasZPM ? "bg-accent text-accent-foreground" : ""}>
+                {player.hasZPM ? "Ready" : "Missing"}
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
