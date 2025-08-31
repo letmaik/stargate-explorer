@@ -1,4 +1,4 @@
-import { World, Position, TileType, GateAddress } from '@/lib/types';
+import { World, Position, TileType, GateAddress, GameState } from '@/lib/types';
 import { getTileEmoji, getBiomeExploredColor } from '@/lib/worldGenerator';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -7,12 +7,13 @@ interface WorldMapProps {
   world: World;
   address?: GateAddress | null;
   playerPosition: Position;
+  gameState: GameState;
   onMove: (direction: Position) => void;
   onInteract: (position: Position) => void;
   onCheat?: (cheatCode: string) => void;
 }
 
-export function WorldMap({ world, address, playerPosition, onMove, onInteract, onCheat }: WorldMapProps) {
+export function WorldMap({ world, address, playerPosition, gameState, onMove, onInteract, onCheat }: WorldMapProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.key.toLowerCase()) {
       case 'w':
@@ -30,6 +31,11 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
       case 'e':
       case ' ':
         onInteract(playerPosition);
+        break;
+      case 'y':
+        console.log('=== STARGATE EXPLORER GAME STATE DUMP ===');
+        console.log(JSON.stringify(gameState, null, 2));
+        console.log('=== END GAME STATE DUMP ===');
         break;
       case '=':
         onCheat?.('unlock_world');
@@ -81,7 +87,7 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
           )}
         </div>
         <div className="text-xs text-muted-foreground">
-          Use WASD to move, E to interact
+          Use WASD to move, E to interact, Y to dump state
         </div>
       </div>
       <div 

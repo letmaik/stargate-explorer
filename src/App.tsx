@@ -56,6 +56,7 @@ function App() {
                 world={currentWorld}
                 address={currentAddress}
                 playerPosition={gameState.player.position}
+                gameState={gameState}
                 onMove={movePlayer}
                 onInteract={interactWithTile}
                 onCheat={handleCheat}
