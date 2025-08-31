@@ -96,7 +96,8 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
                   const dx = tile.position.x - playerPosition.x;
                   const dy = tile.position.y - playerPosition.y;
                   
-                  if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1 && (dx !== 0 || dy !== 0)) {
+                  // Only allow orthogonal movement (no diagonals), and only to adjacent tiles
+                  if (Math.abs(dx) + Math.abs(dy) === 1) {
                     onMove({ x: dx, y: dy });
                   } else if (dx === 0 && dy === 0) {
                     onInteract(tile.position);

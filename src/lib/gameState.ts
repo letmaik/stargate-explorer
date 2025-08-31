@@ -40,11 +40,11 @@ export function createInitialGameState(): GameState {
 
 export function generateNewWorld(level: number): { world: any; address: GateAddress } {
   const worldTemplates = [
-    { biome: 'jungle' as const, name: 'Jungle World', symbols: ['🌿', '🐍', '🦋', '🌺', '🌳', '💧'] },
-    { biome: 'desert' as const, name: 'Desert World', symbols: ['🏜️', '🦂', '🌵', '🔥', '💎', '🏺'] },
-    { biome: 'arctic' as const, name: 'Ice World', symbols: ['❄️', '🐧', '⛄', '🧊', '🌨️', '🏔️'] },
-    { biome: 'volcanic' as const, name: 'Volcanic World', symbols: ['🌋', '🔥', '💀', '⚡', '🌪️', '🗿'] },
-    { biome: 'alien_city' as const, name: 'Ancient City', symbols: ['🏛️', '👽', '🛸', '🔮', '⚡', '🌌'] }
+    { biome: 'jungle' as const, name: 'Chulak', symbols: ['🌿', '🐍', '🦋', '🌺', '🌳', '💧'] },
+    { biome: 'desert' as const, name: 'Abydos', symbols: ['🏜️', '🦂', '🌵', '🔥', '💎', '🏺'] },
+    { biome: 'arctic' as const, name: 'Hoth Prime', symbols: ['❄️', '🐧', '⛄', '🧊', '🌨️', '🏔️'] },
+    { biome: 'volcanic' as const, name: 'Netu', symbols: ['🌋', '🔥', '💀', '⚡', '🌪️', '🗿'] },
+    { biome: 'alien_city' as const, name: 'Atlantis', symbols: ['🏛️', '👽', '🛸', '🔮', '⚡', '🌌'] }
   ];
   
   const template = worldTemplates[Math.min(level - 2, worldTemplates.length - 1)];

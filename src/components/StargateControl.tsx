@@ -34,11 +34,6 @@ export function StargateControl({
         <div className="text-sm text-muted-foreground">
           {isAtGate ? 'Ready to dial' : 'Move to the Stargate to dial'}
         </div>
-        {!isAtGate && (
-          <div className="text-xs text-destructive mt-1">
-            Must be at ⭕ to travel
-          </div>
-        )}
       </div>
       
       {/* Player Status */}
