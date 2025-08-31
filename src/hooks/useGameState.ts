@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { GameState, Position, World } from '@/lib/types';
 import { createInitialGameState, generateNewWorld } from '@/lib/gameState';
-import { generateWorld, generateAtlantisWorld } from '@/lib/worldGenerator';
+import { generateWorld } from '@/lib/worldGenerator';
 import { toast } from 'sonner';
 
 export function useGameState() {
@@ -133,10 +133,9 @@ export function useGameState() {
           // Check if we can generate a new address
           if (newFragments >= 3) {
             const nextLevel = Object.keys(current.worlds).length + 1;
-            const atlantisAlreadyUnlocked = current.addresses.some(addr => addr.id === 'atlantis');
             
-            // Generate regular worlds up to level 6 (5 new worlds)
-            if (nextLevel <= 6) {
+            // Generate worlds up to level 7 (including Atlantis)
+            if (nextLevel <= 7) {
               const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
               
               // Add the new address and world
@@ -145,21 +144,8 @@ export function useGameState() {
               newFragments = 0; // Reset fragments
               levelUp = true;
               toast.success(`New address discovered: ${newAddress.name}`);
-              
-              // If this is the last regular world (level 6), unlock Atlantis
-              if (nextLevel === 6 && !atlantisAlreadyUnlocked) {
-                const atlantisAddress = {
-                  id: 'atlantis',
-                  name: 'Atlantis',
-                  symbols: ['S','U','B','P','O','H','T'],
-                  discovered: false,
-                  isEightChevron: true
-                };
-                newAddresses.push(atlantisAddress);
-                toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
-              }
             }
-            // If max regular worlds reached, don't reset fragments but don't use them either
+            // If max worlds reached, don't reset fragments but don't use them either
           }
           break;
           
@@ -240,7 +226,7 @@ export function useGameState() {
         }
       }
       
-      // Atlantis travel restrictions (only restrictions - not special generation)
+      // Atlantis travel restrictions
       if (worldId === 'atlantis') {
         if (current.currentWorld !== 'earth') {
           toast.error('Atlantis can only be dialed from Earth!');
@@ -257,9 +243,7 @@ export function useGameState() {
       
       // Generate world if it doesn't exist
       if (!targetWorld) {
-        if (worldId === 'atlantis') {
-          targetWorld = generateAtlantisWorld();
-        } else if (worldId !== 'earth') {
+        if (worldId !== 'earth') {
           const level = Object.keys(current.worlds).length;
           targetWorld = generateWorld(
             worldId, 
@@ -335,30 +319,16 @@ export function useGameState() {
           const nextLevel = Object.keys(current.worlds).length + 1;
           
           // Only unlock if not at max worlds
-          if (nextLevel <= 6) {
+          if (nextLevel <= 7) {
             const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
             
-            let newAddresses = [...current.addresses, newAddress];
+            const newAddresses = [...current.addresses, newAddress];
             const updatedWorlds = {
               ...current.worlds,
               [newAddress.id]: newWorld
             };
             
             toast.success(`🎮 DEBUG: Unlocked ${newAddress.name}!`);
-            
-            // If this is the last regular world (level 6), unlock Atlantis
-            const atlantisAlreadyUnlocked = newAddresses.some(addr => addr.id === 'atlantis');
-            if (nextLevel === 6 && !atlantisAlreadyUnlocked) {
-              const atlantisAddress = {
-                id: 'atlantis',
-                name: 'Atlantis',
-                symbols: ['S','U','B','P','O','H','T'],
-                discovered: false,
-                isEightChevron: true
-              };
-              newAddresses.push(atlantisAddress);
-              toast.success('🎮 DEBUG: Atlantis unlocked!');
-            }
             
             return {
               ...current,

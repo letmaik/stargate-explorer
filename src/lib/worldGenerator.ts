@@ -1,54 +1,5 @@
 import { World, Tile, TileType, Position } from './types';
 
-export function generateAtlantisWorld(): World {
-  const size = { width: 20, height: 13 };
-  const tiles: Tile[][] = [];
-  
-  // Initialize empty grid
-  for (let y = 0; y < size.height; y++) {
-    tiles[y] = [];
-    for (let x = 0; x < size.width; x++) {
-      tiles[y][x] = {
-        type: 'empty',
-        position: { x, y },
-        discovered: true
-      };
-    }
-  }
-  
-  // Place walls around perimeter
-  for (let x = 0; x < size.width; x++) {
-    tiles[0][x].type = 'wall';
-    tiles[size.height - 1][x].type = 'wall';
-  }
-  for (let y = 0; y < size.height; y++) {
-    tiles[y][0].type = 'wall';
-    tiles[y][size.width - 1].type = 'wall';
-  }
-  
-  // Calculate center position for gate/player
-  const centerX = Math.floor(size.width / 2);
-  const centerY = Math.floor(size.height / 2);
-  
-  // Player starts at center
-  const playerPosition = { x: centerX, y: centerY };
-  const gatePosition = { x: centerX, y: centerY };
-  
-  // Place gate at center
-  tiles[centerY][centerX].type = 'gate';
-  
-  return {
-    id: 'atlantis',
-    name: 'Atlantis',
-    biome: 'atlantis',
-    size,
-    tiles,
-    playerPosition,
-    gatePosition,
-    discovered: false
-  };
-}
-
 export function generateWorld(
   id: string, 
   name: string, 
@@ -65,7 +16,7 @@ export function generateWorld(
       tiles[y][x] = {
         type: 'empty',
         position: { x, y },
-        discovered: false
+        discovered: biome === 'atlantis' // Atlantis starts fully discovered
       };
     }
   }
@@ -97,43 +48,49 @@ export function generateWorld(
     }
   }
   
-  // Place ruins with artifacts
-  const ruinCount = 3 + level;
-  for (let i = 0; i < ruinCount; i++) {
-    const pos = findEmptyPosition(tiles, size);
-    if (pos) {
-      tiles[pos.y][pos.x].type = 'ruins';
-      // 70% chance of artifact in ruins
-      if (Math.random() < 0.7) {
-        const artifactPos = findNearbyEmpty(tiles, size, pos);
-        if (artifactPos) {
-          tiles[artifactPos.y][artifactPos.x].type = 'artifact';
-          tiles[artifactPos.y][artifactPos.x].id = `artifact_${Date.now()}_${i}`;
+  // Place ruins with artifacts (skip for Atlantis)
+  if (biome !== 'atlantis') {
+    const ruinCount = 3 + level;
+    for (let i = 0; i < ruinCount; i++) {
+      const pos = findEmptyPosition(tiles, size);
+      if (pos) {
+        tiles[pos.y][pos.x].type = 'ruins';
+        // 70% chance of artifact in ruins
+        if (Math.random() < 0.7) {
+          const artifactPos = findNearbyEmpty(tiles, size, pos);
+          if (artifactPos) {
+            tiles[artifactPos.y][artifactPos.x].type = 'artifact';
+            tiles[artifactPos.y][artifactPos.x].id = `artifact_${Date.now()}_${i}`;
+          }
         }
       }
     }
   }
   
-  // Place supplies (more common now)
-  const supplyCount = 8 + Math.floor(level * 2); // Much more supplies
-  for (let i = 0; i < supplyCount; i++) {
-    const pos = findEmptyPosition(tiles, size);
-    if (pos) {
-      tiles[pos.y][pos.x].type = 'supplies';
-      tiles[pos.y][pos.x].id = `supplies_${Date.now()}_${i}`;
+  // Place supplies (more common now, skip for Atlantis)
+  if (biome !== 'atlantis') {
+    const supplyCount = 8 + Math.floor(level * 2); // Much more supplies
+    for (let i = 0; i < supplyCount; i++) {
+      const pos = findEmptyPosition(tiles, size);
+      if (pos) {
+        tiles[pos.y][pos.x].type = 'supplies';
+        tiles[pos.y][pos.x].id = `supplies_${Date.now()}_${i}`;
+      }
     }
   }
 
-  // Place gate fragments - ensure Earth has at least 3
-  let fragmentCount = 2 + Math.floor(level / 2);
-  if (biome === 'earth') {
-    fragmentCount = Math.max(3, fragmentCount); // Earth always has at least 3 fragments
-  }
-  for (let i = 0; i < fragmentCount; i++) {
-    const pos = findEmptyPosition(tiles, size);
-    if (pos) {
-      tiles[pos.y][pos.x].type = 'gate_fragment';
-      tiles[pos.y][pos.x].id = `fragment_${Date.now()}_${i}`;
+  // Place gate fragments - ensure Earth has at least 3 (skip for Atlantis)
+  if (biome !== 'atlantis') {
+    let fragmentCount = 2 + Math.floor(level / 2);
+    if (biome === 'earth') {
+      fragmentCount = Math.max(3, fragmentCount); // Earth always has at least 3 fragments
+    }
+    for (let i = 0; i < fragmentCount; i++) {
+      const pos = findEmptyPosition(tiles, size);
+      if (pos) {
+        tiles[pos.y][pos.x].type = 'gate_fragment';
+        tiles[pos.y][pos.x].id = `fragment_${Date.now()}_${i}`;
+      }
     }
   }
   
@@ -146,22 +103,26 @@ export function generateWorld(
     }
   }
   
-  // Place hazards based on biome
-  const hazardCount = Math.floor(level * 1.5) + 2;
-  for (let i = 0; i < hazardCount; i++) {
-    const pos = findEmptyPosition(tiles, size);
-    if (pos) {
-      tiles[pos.y][pos.x].type = 'hazard';
+  // Place hazards based on biome (skip for Atlantis)
+  if (biome !== 'atlantis') {
+    const hazardCount = Math.floor(level * 1.5) + 2;
+    for (let i = 0; i < hazardCount; i++) {
+      const pos = findEmptyPosition(tiles, size);
+      if (pos) {
+        tiles[pos.y][pos.x].type = 'hazard';
+      }
     }
   }
   
-  // Place enemies
-  const enemyCount = level + 1;
-  for (let i = 0; i < enemyCount; i++) {
-    const pos = findEmptyPosition(tiles, size);
-    if (pos) {
-      tiles[pos.y][pos.x].type = 'enemy';
-      tiles[pos.y][pos.x].enemyDirection = getRandomDirection();
+  // Place enemies (skip for Atlantis)
+  if (biome !== 'atlantis') {
+    const enemyCount = level + 1;
+    for (let i = 0; i < enemyCount; i++) {
+      const pos = findEmptyPosition(tiles, size);
+      if (pos) {
+        tiles[pos.y][pos.x].type = 'enemy';
+        tiles[pos.y][pos.x].enemyDirection = getRandomDirection();
+      }
     }
   }
   
