@@ -33,9 +33,13 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
     }
   };
 
-  const getTileColor = (type: TileType, discovered: boolean): string => {
+  const getTileColor = (type: TileType, discovered: boolean, position: Position): string => {
+    // Check if this tile should be initially visible (near starting position)
+    const distanceFromStart = Math.abs(position.x - world.playerPosition.x) + Math.abs(position.y - world.playerPosition.y);
+    const shouldShowBiomeColor = discovered || distanceFromStart <= 2;
+    
     switch (type) {
-      case 'empty': return discovered ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
+      case 'empty': return shouldShowBiomeColor ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
       case 'wall': return 'bg-secondary';
       case 'ruins': return 'bg-amber-900/80';
       case 'hazard': return 'bg-destructive/80';
@@ -44,7 +48,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
       case 'gate': return 'bg-primary/80';
       case 'gate_fragment': return 'bg-blue-600/80';
       case 'supplies': return 'bg-blue-500/80';
-      default: return discovered ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
+      default: return shouldShowBiomeColor ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
     }
   };
 
@@ -89,7 +93,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
                 key={`${tile.position.x}-${tile.position.y}`}
                 className={cn(
                   "aspect-square flex items-center justify-center text-xs cursor-pointer transition-all hover:brightness-110",
-                  isVisible ? getTileColor(tile.type, tile.discovered) : 'bg-black/80',
+                  isVisible ? getTileColor(tile.type, tile.discovered, tile.position) : 'bg-black/80',
                   hasPlayer && "ring-2 ring-primary",
                   "min-w-6 min-h-6"
                 )}
