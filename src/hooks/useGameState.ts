@@ -144,19 +144,6 @@ export function useGameState() {
               newFragments = 0; // Reset fragments
               levelUp = true;
               toast.success(`New address discovered: ${newAddress.name}`);
-              
-              // If this was the 5th world (level 6), also unlock Atlantis
-              if (nextLevel === 6) {
-                const atlantisAddress = {
-                  id: 'atlantis',
-                  name: 'Atlantis',
-                  symbols: ['S','U','B','P','O','H','T'],
-                  discovered: true,
-                  isEightChevron: true
-                };
-                newAddresses = [...newAddresses, atlantisAddress];
-                toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
-              }
             }
             // If max regular worlds reached, don't reset fragments but don't use them either
           }
@@ -292,6 +279,31 @@ export function useGameState() {
       
       toast.success(`Traveled to ${targetAddress.name}`);
       
+      // Mark the world as discovered and check if all regular worlds have been visited
+      const updatedAddresses = current.addresses.map(addr => 
+        addr.id === worldId ? { ...addr, discovered: true } : addr
+      );
+      
+      // Check if we should unlock Atlantis (all regular worlds visited + not already unlocked)
+      const regularWorldsCount = 5; // There are 5 regular worlds (excluding Earth and Atlantis)
+      const visitedRegularWorlds = updatedAddresses.filter(addr => 
+        addr.discovered && addr.id !== 'earth' && addr.id !== 'atlantis'
+      ).length;
+      
+      const atlantisAlreadyUnlocked = updatedAddresses.some(addr => addr.id === 'atlantis');
+      
+      if (visitedRegularWorlds >= regularWorldsCount && !atlantisAlreadyUnlocked) {
+        const atlantisAddress = {
+          id: 'atlantis',
+          name: 'Atlantis',
+          symbols: ['S','U','B','P','O','H','T'],
+          discovered: false,
+          isEightChevron: true
+        };
+        updatedAddresses.push(atlantisAddress);
+        toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
+      }
+      
       return {
         ...current,
         currentWorld: worldId,
@@ -303,9 +315,7 @@ export function useGameState() {
           ...current.player,
           position: targetWorld.playerPosition
         },
-        addresses: current.addresses.map(addr => 
-          addr.id === worldId ? { ...addr, discovered: true } : addr
-        )
+        addresses: updatedAddresses
       };
     });
   }, [setGameState]);
@@ -338,11 +348,11 @@ export function useGameState() {
         case 'unlock_world': {
           const nextLevel = Object.keys(current.worlds).length + 1;
           
-          // Only unlock if not at max worlds and haven't unlocked Atlantis yet
+          // Only unlock if not at max worlds
           if (nextLevel <= 6) {
             const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
             
-            const newAddresses = [...current.addresses, newAddress];
+            let newAddresses = [...current.addresses, newAddress];
             const updatedWorlds = {
               ...current.worlds,
               [newAddress.id]: newWorld
@@ -350,13 +360,20 @@ export function useGameState() {
             
             toast.success(`🎮 DEBUG: Unlocked ${newAddress.name}!`);
             
-            // If this was the 5th world (level 6), also unlock Atlantis
-            if (nextLevel === 6) {
+            // Check if we should unlock Atlantis (all regular worlds unlocked + not already unlocked)
+            const regularWorldsCount = 5; // There are 5 regular worlds (excluding Earth and Atlantis)
+            const availableRegularWorlds = newAddresses.filter(addr => 
+              addr.id !== 'earth' && addr.id !== 'atlantis'
+            ).length;
+            
+            const atlantisAlreadyUnlocked = newAddresses.some(addr => addr.id === 'atlantis');
+            
+            if (availableRegularWorlds >= regularWorldsCount && !atlantisAlreadyUnlocked) {
               const atlantisAddress = {
                 id: 'atlantis',
                 name: 'Atlantis',
                 symbols: ['S','U','B','P','O','H','T'],
-                discovered: true,
+                discovered: false,
                 isEightChevron: true
               };
               newAddresses.push(atlantisAddress);
