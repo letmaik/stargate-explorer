@@ -97,8 +97,12 @@ export function StargateControl({
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{address.name}</span>
                     </div>
-                    <div className="text-xs text-muted-foreground stargate-symbols">
-                      {address.symbols.join(' ')}
+                    <div className="text-xs text-muted-foreground stargate-symbols flex gap-1">
+                      {address.symbols.map((symbol, index) => (
+                        <span key={index} className="inline-block w-4 text-center">
+                          {symbol}
+                        </span>
+                      ))}
                     </div>
                   </div>
                   {currentWorld !== address.id && (
