@@ -1,1 +1,80 @@
-/* This is where custom CSS goes */
+@import 'tailwindcss';
+@import "tw-animate-css";
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+:root {
+  /* Stargate Explorer Theme - Triadic: Deep Space Blue, Ancient Gold, Alien Green */
+  --background: oklch(0.08 0.08 250); /* Deep space blue-black */
+  --foreground: oklch(0.98 0.02 250); /* Almost white with blue tint */
+
+  --card: oklch(0.15 0.06 250); /* Dark blue-gray for panels */
+  --card-foreground: oklch(0.95 0.02 250); /* Light text on cards */
+  
+  --popover: oklch(0.12 0.06 250); /* Slightly lighter than cards */
+  --popover-foreground: oklch(0.95 0.02 250);
+
+  /* Energy Gold for primary actions (gate activation, important buttons) */
+  --primary: oklch(0.75 0.18 85); /* Bright energy gold */
+  --primary-foreground: oklch(0.12 0.02 250); /* Dark text on gold */
+
+  /* Ancient Stone Gray for secondary elements */
+  --secondary: oklch(0.45 0.04 250); /* Stone gray with blue tint */
+  --secondary-foreground: oklch(0.95 0.02 250); /* Light text */
+
+  /* Alien Green for accents and special elements */
+  --accent: oklch(0.65 0.15 140); /* Bright alien green */
+  --accent-foreground: oklch(0.12 0.02 250); /* Dark text on green */
+
+  /* Muted elements for less important UI */
+  --muted: oklch(0.20 0.04 250); /* Muted blue-gray */
+  --muted-foreground: oklch(0.65 0.03 250); /* Muted text */
+
+  /* Danger/Alert color for hazards and low resources */
+  --destructive: oklch(0.65 0.25 15); /* Warning red-orange */
+  --destructive-foreground: oklch(0.98 0.02 250);
+
+  /* UI structural colors */
+  --border: oklch(0.25 0.06 250); /* Subtle borders */
+  --input: oklch(0.25 0.06 250); /* Input field borders */
+  --ring: oklch(0.75 0.18 85); /* Focus rings in gold */
+
+  --radius: 0.5rem;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-full: 9999px;
+}
