@@ -241,24 +241,6 @@ export function useGameState() {
       
       let targetWorld = current.worlds[worldId];
       
-      // Generate world if it doesn't exist
-      if (!targetWorld) {
-        if (worldId !== 'earth') {
-          const level = Object.keys(current.worlds).length;
-          targetWorld = generateWorld(
-            worldId, 
-            targetAddress.name, 
-            'jungle', // Default biome for generated worlds 
-            level
-          );
-        }
-      }
-      
-      if (!targetWorld) {
-        toast.error('Cannot generate destination world');
-        return current;
-      }
-      
       toast.success(`Traveled to ${targetAddress.name}`);
       
       // Mark the world as discovered
