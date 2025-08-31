@@ -1,59 +1,12 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useKV } from '@github/spark/hooks';
-import { GameState, Position, World } from '@/lib/types';
+import { GameState, Position } from '@/lib/types';
 import { createInitialGameState, generateNewWorld } from '@/lib/gameState';
-import { generateWorld } from '@/lib/worldGenerator';
 import { toast } from 'sonner';
 
 export function useGameState() {
   const [gameState, setGameState, deleteGameState] = useKV<GameState>('stargate-game', createInitialGameState());
   const [lastMoveTime, setLastMoveTime] = useState(0);
-
-  // Mark initial tiles as discovered when entering a world
-  useEffect(() => {
-    if (gameState.currentWorld) {
-      const world = gameState.worlds[gameState.currentWorld];
-      if (world) {
-        const playerPos = world.playerPosition;
-        
-        // Check if any tiles around starting position need to be discovered
-        const needsDiscovery = world.tiles.some(row => 
-          row.some(tile => {
-            const distance = Math.abs(tile.position.x - playerPos.x) + Math.abs(tile.position.y - playerPos.y);
-            return distance <= 2 && !tile.discovered;
-          })
-        );
-        
-        if (needsDiscovery) {
-          setGameState((current) => {
-            const currentWorld = current.worlds[current.currentWorld!];
-            if (!currentWorld) return current;
-            
-            const updatedTiles = currentWorld.tiles.map(row => 
-              row.map(tile => {
-                const distance = Math.abs(tile.position.x - playerPos.x) + Math.abs(tile.position.y - playerPos.y);
-                if (distance <= 2) {
-                  return { ...tile, discovered: true };
-                }
-                return tile;
-              })
-            );
-            
-            return {
-              ...current,
-              worlds: {
-                ...current.worlds,
-                [current.currentWorld!]: {
-                  ...currentWorld,
-                  tiles: updatedTiles
-                }
-              }
-            };
-          });
-        }
-      }
-    }
-  }, [gameState.currentWorld, setGameState]);
 
   const resetGame = useCallback(() => {
     setGameState(createInitialGameState());

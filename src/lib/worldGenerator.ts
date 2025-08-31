@@ -138,6 +138,16 @@ export function generateWorld(
   tiles[playerStartY][playerStartX].type = 'gate';
   const gatePosition = { x: playerStartX, y: playerStartY };
   
+  // Ensure initial discovery around the starting position (vision radius 2)
+  for (let y = 0; y < size.height; y++) {
+    for (let x = 0; x < size.width; x++) {
+      const distance = Math.abs(x - playerStartX) + Math.abs(y - playerStartY);
+      if (distance <= 2) {
+        tiles[y][x].discovered = true;
+      }
+    }
+  }
+  
   return {
     id,
     name,
