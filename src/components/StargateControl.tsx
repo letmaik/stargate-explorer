@@ -106,19 +106,12 @@ export function StargateControl({
               (currentWorld === 'earth' && player.hasZPM && isAtGate) : 
               isAtGate;
             
-            const isEightChevron = address.isEightChevron;
-            
             return (
               <div key={address.id} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{address.name}</span>
-                      {isEightChevron && (
-                        <Badge variant="outline" className="text-xs">
-                          8-Chevron
-                        </Badge>
-                      )}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {address.symbols.join(' ')}

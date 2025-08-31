@@ -11,7 +11,7 @@ interface GameOverModalProps {
 export function GameOverModal({ isOpen, victory, onRestart }: GameOverModalProps) {
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className={`sm:max-w-md ${victory ? '[&>button]:hidden' : ''}`}>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
             {victory ? '🎉 Victory!' : '💀 Mission Failed'}

@@ -1,7 +1,6 @@
 import { World, Position, TileType } from '@/lib/types';
-import { getTileEmoji, getBiomeColor, getBiomeExploredColor } from '@/lib/worldGenerator';
+import { getTileEmoji, getBiomeExploredColor } from '@/lib/worldGenerator';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 interface WorldMapProps {
@@ -73,9 +72,6 @@ export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }:
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
-          <Badge variant="outline" className={cn("text-xs", getBiomeColor(world.biome))}>
-            {world.biome.replace('_', ' ').toUpperCase()}
-          </Badge>
         </div>
         <div className="text-xs text-muted-foreground">
           Use WASD to move, E to interact
