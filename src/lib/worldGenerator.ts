@@ -203,6 +203,18 @@ export function getBiomeColor(biome: World['biome']): string {
   }
 }
 
+export function getBiomeExploredColor(biome: World['biome']): string {
+  switch (biome) {
+    case 'earth': return 'bg-green-900/30';
+    case 'jungle': return 'bg-green-800/30';
+    case 'desert': return 'bg-yellow-800/30';
+    case 'arctic': return 'bg-blue-200/30';
+    case 'volcanic': return 'bg-red-900/30';
+    case 'alien_city': return 'bg-purple-900/30';
+    default: return 'bg-gray-800/30';
+  }
+}
+
 export function getTileEmoji(type: TileType): string {
   switch (type) {
     case 'empty': return '';

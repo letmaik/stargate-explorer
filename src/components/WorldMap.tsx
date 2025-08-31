@@ -1,5 +1,5 @@
 import { World, Position, TileType } from '@/lib/types';
-import { getTileEmoji, getBiomeColor } from '@/lib/worldGenerator';
+import { getTileEmoji, getBiomeColor, getBiomeExploredColor } from '@/lib/worldGenerator';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -33,9 +33,9 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
     }
   };
 
-  const getTileColor = (type: TileType): string => {
+  const getTileColor = (type: TileType, discovered: boolean): string => {
     switch (type) {
-      case 'empty': return 'bg-muted/30';
+      case 'empty': return discovered ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
       case 'wall': return 'bg-secondary';
       case 'ruins': return 'bg-amber-900/80';
       case 'hazard': return 'bg-destructive/80';
@@ -43,7 +43,8 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
       case 'artifact': return 'bg-accent/80';
       case 'gate': return 'bg-primary/80';
       case 'gate_fragment': return 'bg-blue-600/80';
-      default: return 'bg-muted/30';
+      case 'supplies': return 'bg-blue-500/80';
+      default: return discovered ? getBiomeExploredColor(world.biome) : 'bg-muted/30';
     }
   };
 
@@ -88,7 +89,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
                 key={`${tile.position.x}-${tile.position.y}`}
                 className={cn(
                   "aspect-square flex items-center justify-center text-xs cursor-pointer transition-all hover:brightness-110",
-                  isVisible ? getTileColor(tile.type) : 'bg-black/80',
+                  isVisible ? getTileColor(tile.type, tile.discovered) : 'bg-black/80',
                   hasPlayer && "ring-2 ring-primary",
                   "min-w-6 min-h-6"
                 )}
@@ -116,7 +117,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
       </div>
       
       {/* Legend */}
-      <div className="grid grid-cols-4 gap-2 text-xs">
+      <div className="grid grid-cols-5 gap-2 text-xs">
         <div className="flex items-center gap-1">
           <span>👤</span> Player
         </div>
@@ -128,6 +129,9 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
         </div>
         <div className="flex items-center gap-1">
           <span>📜</span> Fragment
+        </div>
+        <div className="flex items-center gap-1">
+          <span>📦</span> Supplies
         </div>
         <div className="flex items-center gap-1">
           <span>🏛️</span> Ruins
