@@ -75,7 +75,7 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
           {address && (
-            <div className="text-sm text-muted-foreground stargate-symbols">
+            <div className="text-muted-foreground stargate-symbols text-sm font-bold">
               {address.symbols.join(' ')}
             </div>
           )}
@@ -84,7 +84,6 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
           Use WASD to move, E to interact
         </div>
       </div>
-      
       <div 
         className="relative bg-background border border-border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-primary"
         tabIndex={0}
@@ -129,7 +128,6 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
           })}
         </div>
       </div>
-      
       {/* Legend */}
       <div className="grid grid-cols-5 gap-2 text-xs">
         <div className="flex items-center gap-1">
