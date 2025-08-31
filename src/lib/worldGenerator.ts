@@ -31,12 +31,19 @@ export function generateWorld(
     tiles[y][size.width - 1].type = 'wall';
   }
   
-  // Place random walls/obstacles
+  // Calculate center position for gate/player
+  const centerX = Math.floor(size.width / 2);
+  const centerY = Math.floor(size.height / 2);
+  
+  // Place random walls/obstacles (avoid center area)
   const wallCount = Math.floor((size.width * size.height) * 0.15);
   for (let i = 0; i < wallCount; i++) {
     const x = Math.floor(Math.random() * (size.width - 2)) + 1;
     const y = Math.floor(Math.random() * (size.height - 2)) + 1;
-    if (tiles[y][x].type === 'empty') {
+    
+    // Don't place walls too close to center
+    const distFromCenter = Math.abs(x - centerX) + Math.abs(y - centerY);
+    if (tiles[y][x].type === 'empty' && distFromCenter >= 3) {
       tiles[y][x].type = 'wall';
     }
   }
@@ -58,6 +65,16 @@ export function generateWorld(
     }
   }
   
+  // Place supplies (more common now)
+  const supplyCount = 8 + Math.floor(level * 2); // Much more supplies
+  for (let i = 0; i < supplyCount; i++) {
+    const pos = findEmptyPosition(tiles, size);
+    if (pos) {
+      tiles[pos.y][pos.x].type = 'supplies';
+      tiles[pos.y][pos.x].id = `supplies_${Date.now()}_${i}`;
+    }
+  }
+
   // Place gate fragments
   const fragmentCount = 2 + Math.floor(level / 2);
   for (let i = 0; i < fragmentCount; i++) {
@@ -87,14 +104,17 @@ export function generateWorld(
     }
   }
   
-  // Place exit gate
-  const gatePosition = findEmptyPosition(tiles, size, { x: size.width - 3, y: size.height - 3 });
-  if (gatePosition) {
-    tiles[gatePosition.y][gatePosition.x].type = 'gate';
-  }
+  // Player starts at a specific position
+  const playerStartX = centerX;
+  const playerStartY = centerY;
   
-  // Player starts at top-left area
-  const playerPosition = findEmptyPosition(tiles, size, { x: 2, y: 2 });
+  // Ensure starting position is clear
+  tiles[playerStartY][playerStartX].type = 'empty';
+  const playerPosition = { x: playerStartX, y: playerStartY };
+
+  // Place gate at the same location as player start
+  tiles[playerStartY][playerStartX].type = 'gate';
+  const gatePosition = { x: playerStartX, y: playerStartY };
   
   return {
     id,
@@ -102,8 +122,8 @@ export function generateWorld(
     biome,
     size,
     tiles,
-    playerPosition: playerPosition || { x: 1, y: 1 },
-    gatePosition: gatePosition || { x: size.width - 2, y: size.height - 2 },
+    playerPosition: playerPosition,
+    gatePosition: gatePosition,
     discovered: false
   };
 }
@@ -193,6 +213,7 @@ export function getTileEmoji(type: TileType): string {
     case 'artifact': return '💎';
     case 'gate': return '⭕';
     case 'gate_fragment': return '📜';
+    case 'supplies': return '📦';
     case 'player': return '👤';
     default: return '';
   }

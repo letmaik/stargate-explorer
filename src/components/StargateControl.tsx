@@ -2,13 +2,14 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { GateAddress, Player } from '@/lib/types';
+import { GateAddress, Player, World } from '@/lib/types';
 import { Zap, Package, Gem, Scroll } from '@phosphor-icons/react';
 
 interface StargateControlProps {
   addresses: GateAddress[];
   player: Player;
   currentWorld: string | null;
+  currentWorldData: World | null;
   onTravel: (worldId: string) => void;
   onReturnToEarth: () => void;
 }
@@ -16,20 +17,31 @@ interface StargateControlProps {
 export function StargateControl({ 
   addresses, 
   player, 
-  currentWorld, 
+  currentWorld,
+  currentWorldData,
   onTravel, 
   onReturnToEarth 
 }: StargateControlProps) {
   const unlockedAddresses = addresses.filter(addr => addr.unlocked);
   const suppliesPercentage = (player.supplies / player.maxSupplies) * 100;
   
+  // Check if player is at the gate position
+  const isAtGate = currentWorldData ? 
+    (player.position.x === currentWorldData.gatePosition.x && 
+     player.position.y === currentWorldData.gatePosition.y) : false;
+  
   return (
     <Card className="p-6 space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-primary mb-2">Stargate Control</h2>
         <div className="text-sm text-muted-foreground">
-          Select destination coordinates
+          {isAtGate ? 'Ready to dial' : 'Move to the Stargate to dial'}
         </div>
+        {!isAtGate && (
+          <div className="text-xs text-destructive mt-1">
+            Must be at ⭕ to travel
+          </div>
+        )}
       </div>
       
       {/* Player Status */}
@@ -88,8 +100,9 @@ export function StargateControl({
                 {currentWorld !== address.id && (
                   <Button
                     size="sm"
+                    disabled={!isAtGate}
                     onClick={() => onTravel(address.id)}
-                    className="bg-primary hover:bg-primary/90"
+                    className="bg-primary hover:bg-primary/90 disabled:opacity-50"
                   >
                     Dial
                   </Button>
@@ -112,8 +125,9 @@ export function StargateControl({
           <Button
             variant="outline"
             size="sm"
+            disabled={!isAtGate}
             onClick={onReturnToEarth}
-            className="w-full"
+            className="w-full disabled:opacity-50"
           >
             Emergency Return to Earth
           </Button>

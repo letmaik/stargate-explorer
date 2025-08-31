@@ -61,6 +61,15 @@ export function useGameState() {
           toast.error('Enemy encounter! Lost 10 supplies');
           break;
           
+        case 'supplies':
+          if (targetTile.id && newSupplies < current.player.maxSupplies) {
+            const suppliesGained = Math.min(10, current.player.maxSupplies - newSupplies);
+            newSupplies += suppliesGained;
+            toast.success(`Supplies collected! Gained ${suppliesGained} supplies`);
+            targetTile.type = 'empty'; // Remove supplies from world
+          }
+          break;
+          
         case 'artifact':
           if (targetTile.id && !newArtifacts.includes(targetTile.id)) {
             newArtifacts.push(targetTile.id);
@@ -151,6 +160,20 @@ export function useGameState() {
       if (!targetAddress || !targetAddress.unlocked) {
         toast.error('Cannot travel to locked destination');
         return current;
+      }
+      
+      // Check if player is at the gate position
+      if (current.currentWorld) {
+        const currentWorldData = current.worlds[current.currentWorld];
+        if (currentWorldData) {
+          const playerPos = current.player.position;
+          const gatePos = currentWorldData.gatePosition;
+          
+          if (playerPos.x !== gatePos.x || playerPos.y !== gatePos.y) {
+            toast.error('You must be at the Stargate to dial out!');
+            return current;
+          }
+        }
       }
       
       let targetWorld = current.worlds[worldId];

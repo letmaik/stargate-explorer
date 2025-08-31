@@ -42,6 +42,7 @@ function App() {
               addresses={gameState.addresses}
               player={gameState.player}
               currentWorld={gameState.currentWorld}
+              currentWorldData={currentWorld}
               onTravel={travelToWorld}
               onReturnToEarth={() => travelToWorld('earth')}
             />

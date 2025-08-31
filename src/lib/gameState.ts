@@ -22,12 +22,12 @@ export function createInitialGameState(): GameState {
   ];
   
   return {
-    currentWorld: null,
+    currentWorld: 'earth', // Start on Earth automatically
     worlds: {
       earth: earthWorld
     },
     player: {
-      position: { x: 2, y: 2 },
+      position: earthWorld.playerPosition, // Start at the gate position
       supplies: 50,
       maxSupplies: 50,
       artifacts: [],

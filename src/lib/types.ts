@@ -12,7 +12,8 @@ export type TileType =
   | 'artifact' 
   | 'gate' 
   | 'player'
-  | 'gate_fragment';
+  | 'gate_fragment'
+  | 'supplies';
 
 export type Tile = {
   type: TileType;
