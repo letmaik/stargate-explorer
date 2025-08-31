@@ -69,7 +69,7 @@ export function WorldMap({ world, playerPosition, onMove, onInteract, onCheat }:
   };
 
   return (
-    <Card className="p-3 space-y-2">
+    <Card className="p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>

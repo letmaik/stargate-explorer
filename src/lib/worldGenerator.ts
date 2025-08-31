@@ -1,7 +1,7 @@
 import { World, Tile, TileType, Position } from './types';
 
 export function generateAtlantisWorld(): World {
-  const size = { width: 20, height: 14 };
+  const size = { width: 20, height: 13 };
   const tiles: Tile[][] = [];
   
   // Initialize empty grid
@@ -55,7 +55,7 @@ export function generateWorld(
   biome: World['biome'], 
   level: number = 1
 ): World {
-  const size = { width: 20, height: 14 };
+  const size = { width: 20, height: 13 };
   const tiles: Tile[][] = [];
   
   // Initialize empty grid
