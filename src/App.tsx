@@ -44,7 +44,6 @@ function App() {
               currentWorld={gameState.currentWorld}
               currentWorldData={currentWorld}
               onTravel={travelToWorld}
-              onReturnToEarth={() => travelToWorld('earth')}
             />
           </div>
 

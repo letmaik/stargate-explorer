@@ -48,6 +48,7 @@ export function useGameState() {
       let newArtifacts = [...current.player.artifacts];
       let newFragments = current.player.gateFragments;
       let newAddresses = [...current.addresses];
+      let levelUp = false;
       
       // Handle tile interactions
       switch (targetTile.type) {
@@ -83,29 +84,17 @@ export function useGameState() {
           toast.success('Gate fragment collected!');
           targetTile.type = 'empty'; // Remove fragment from world
           
-          // Check if we can unlock a new address
+          // Check if we can generate a new address
           if (newFragments >= 3) {
-            const lockedAddresses = newAddresses.filter(addr => !addr.unlocked);
-            if (lockedAddresses.length > 0) {
-              const addressToUnlock = lockedAddresses[0];
-              newAddresses = newAddresses.map(addr => 
-                addr.id === addressToUnlock.id 
-                  ? { ...addr, unlocked: true }
-                  : addr
-              );
-              
-              // Generate the new world
-              const newWorld = generateWorld(
-                addressToUnlock.id, 
-                addressToUnlock.name, 
-                'jungle', // Will be replaced with proper biome logic
-                current.currentLevel + 1
-              );
-              
-              current.worlds[addressToUnlock.id] = newWorld;
-              newFragments = 0; // Reset fragments
-              toast.success(`New address unlocked: ${addressToUnlock.name}`);
-            }
+            const nextLevel = Object.keys(current.worlds).length + 1;
+            const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
+            
+            // Add the new address and world
+            newAddresses = [...newAddresses, newAddress];
+            current.worlds[newAddress.id] = newWorld;
+            newFragments = 0; // Reset fragments
+            levelUp = true;
+            toast.success(`New address discovered: ${newAddress.name}`);
           }
           break;
           
@@ -149,6 +138,7 @@ export function useGameState() {
           gateFragments: newFragments
         },
         addresses: newAddresses,
+        currentLevel: levelUp ? current.currentLevel + 1 : current.currentLevel,
         gameOver
       };
     });
@@ -157,8 +147,8 @@ export function useGameState() {
   const travelToWorld = useCallback((worldId: string) => {
     setGameState((current) => {
       const targetAddress = current.addresses.find(addr => addr.id === worldId);
-      if (!targetAddress || !targetAddress.unlocked) {
-        toast.error('Cannot travel to locked destination');
+      if (!targetAddress) {
+        toast.error('Cannot find destination');
         return current;
       }
       

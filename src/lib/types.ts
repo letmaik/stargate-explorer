@@ -46,7 +46,6 @@ export type GateAddress = {
   id: string;
   name: string;
   symbols: string[];
-  unlocked: boolean;
   discovered?: boolean;
 };
 

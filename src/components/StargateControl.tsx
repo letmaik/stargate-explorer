@@ -11,7 +11,6 @@ interface StargateControlProps {
   currentWorld: string | null;
   currentWorldData: World | null;
   onTravel: (worldId: string) => void;
-  onReturnToEarth: () => void;
 }
 
 export function StargateControl({ 
@@ -19,10 +18,8 @@ export function StargateControl({
   player, 
   currentWorld,
   currentWorldData,
-  onTravel, 
-  onReturnToEarth 
+  onTravel 
 }: StargateControlProps) {
-  const unlockedAddresses = addresses.filter(addr => addr.unlocked);
   const suppliesPercentage = (player.supplies / player.maxSupplies) * 100;
   
   // Check if player is at the gate position
@@ -88,7 +85,7 @@ export function StargateControl({
         </h3>
         
         <div className="space-y-2">
-          {unlockedAddresses.map((address) => (
+          {addresses.map((address) => (
             <div key={address.id} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div>
@@ -118,21 +115,6 @@ export function StargateControl({
           ))}
         </div>
       </div>
-      
-      {/* Emergency Return */}
-      {currentWorld && currentWorld !== 'earth' && (
-        <div className="pt-4 border-t border-border">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!isAtGate}
-            onClick={onReturnToEarth}
-            className="w-full disabled:opacity-50"
-          >
-            Emergency Return to Earth
-          </Button>
-        </div>
-      )}
     </Card>
   );
 }

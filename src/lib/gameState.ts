@@ -9,14 +9,12 @@ export function createInitialGameState(): GameState {
       id: 'earth',
       name: 'Earth (P3X-774)',
       symbols: ['🌍', '🌊', '🌱', '🌤️', '🏔️', '🌋'],
-      unlocked: true,
       discovered: true
     },
     {
       id: 'abydos',
       name: 'Abydos (P8X-873)',
       symbols: ['🏜️', '🔺', '☀️', '💀', '🏛️', '⚱️'],
-      unlocked: true,
       discovered: false
     }
   ];
@@ -58,7 +56,6 @@ export function generateNewWorld(level: number): { world: any; address: GateAddr
     id: worldId,
     name: world.name,
     symbols: template.symbols,
-    unlocked: false,
     discovered: false
   };
   
