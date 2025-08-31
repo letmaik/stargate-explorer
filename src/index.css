@@ -18,9 +18,16 @@
 }
 
 .stargate-symbols {
-  font-family: 'Stargate Glyphs', monospace;
+  font-family: 'Stargate Glyphs';
   font-size: 1.2rem;
   letter-spacing: 0.1em;
+}
+
+.stargate-symbols-lg {
+  font-family: 'Stargate Glyphs';
+  font-size: 1.8rem;
+  letter-spacing: 0em;
+  line-height: 0em;
 }
 
 :root {

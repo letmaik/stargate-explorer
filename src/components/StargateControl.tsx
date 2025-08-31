@@ -61,7 +61,7 @@ export function StargateControl({
         
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <div className="text-sm">📜 Gate Fragments</div>
+            <div className="text-sm">📜 Fragments</div>
             <div className="text-center">
               <Badge variant="secondary" className="text-accent">
                 {player.gateFragments}
@@ -99,7 +99,7 @@ export function StargateControl({
                     </div>
                     <div className="text-xs text-muted-foreground stargate-symbols flex gap-1">
                       {address.symbols.map((symbol, index) => (
-                        <span key={index} className="inline-block w-4 text-center">
+                        <span key={index} className="inline-block w-6 text-center">
                           {symbol}
                         </span>
                       ))}

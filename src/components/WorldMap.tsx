@@ -75,7 +75,7 @@ export function WorldMap({ world, address, playerPosition, onMove, onInteract, o
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
           {address && (
-            <div className="text-muted-foreground stargate-symbols text-sm font-bold">
+            <div className="ml-2 text-muted-foreground stargate-symbols-lg text-sm">
               {address.symbols.join(' ')}
             </div>
           )}
