@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { GateAddress, Player, World } from '@/lib/types';
-import { Planet, Package, SketchLogo, Scroll } from '@phosphor-icons/react';
 
 interface StargateControlProps {
   addresses: GateAddress[];
@@ -40,10 +39,7 @@ export function StargateControl({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <Package size={16} />
-              <span>Supplies</span>
-            </div>
+            <div className="text-sm">📦 Supplies</div>
             <Progress 
               value={suppliesPercentage} 
               className="h-2"
@@ -54,10 +50,7 @@ export function StargateControl({
           </div>
           
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <SketchLogo size={16} />
-              <span>Artifacts</span>
-            </div>
+            <div className="text-sm">💎 Artifacts</div>
             <div className="text-center">
               <Badge variant="secondary" className="text-accent">
                 {player.artifacts.length}
@@ -68,10 +61,7 @@ export function StargateControl({
         
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <Scroll size={16} />
-              <span>Gate Fragments</span>
-            </div>
+            <div className="text-sm">📜 Gate Fragments</div>
             <div className="text-center">
               <Badge variant="secondary" className="text-accent">
                 {player.gateFragments}
@@ -80,10 +70,7 @@ export function StargateControl({
           </div>
           
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <span>⚡</span>
-              <span>ZPM</span>
-            </div>
+            <div className="text-sm">⚡ ZPM</div>
             <div className="text-center">
               <Badge variant={player.hasZPM ? "default" : "secondary"} className={player.hasZPM ? "bg-accent text-accent-foreground" : ""}>
                 {player.hasZPM ? "Ready" : "Missing"}
@@ -95,10 +82,7 @@ export function StargateControl({
       
       {/* Gate Addresses */}
       <div className="space-y-3">
-        <h3 className="font-semibold flex items-center gap-2">
-          <Planet size={16} />
-          Available Destinations
-        </h3>
+        <h3 className="font-semibold">Available Destinations</h3>
         
         <div className="space-y-2">
           {addresses.map((address) => {
