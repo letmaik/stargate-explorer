@@ -11,7 +11,7 @@ export function generateAtlantisWorld(): World {
       tiles[y][x] = {
         type: 'empty',
         position: { x, y },
-        discovered: false
+        discovered: true
       };
     }
   }
