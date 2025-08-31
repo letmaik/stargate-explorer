@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { GateAddress, Player, World } from '@/lib/types';
-import { Zap, Package, Gem, Scroll } from '@phosphor-icons/react';
+import { Planet, Package, SketchLogo, Scroll } from '@phosphor-icons/react';
 
 interface StargateControlProps {
   addresses: GateAddress[];
@@ -60,7 +60,7 @@ export function StargateControl({
           
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm">
-              <Gem size={16} />
+              <SketchLogo size={16} />
               <span>Artifacts</span>
             </div>
             <div className="text-center">
@@ -80,7 +80,7 @@ export function StargateControl({
       {/* Gate Addresses */}
       <div className="space-y-3">
         <h3 className="font-semibold flex items-center gap-2">
-          <Zap size={16} />
+          <Planet size={16} />
           Available Destinations
         </h3>
         
@@ -105,12 +105,6 @@ export function StargateControl({
                   </Button>
                 )}
               </div>
-              
-              {currentWorld === address.id && (
-                <Badge variant="outline" className="w-full justify-center">
-                  Current Location
-                </Badge>
-              )}
             </div>
           ))}
         </div>

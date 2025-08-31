@@ -15,19 +15,15 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.key.toLowerCase()) {
       case 'w':
-      case 'arrowup':
         onMove({ x: 0, y: -1 });
         break;
       case 's':
-      case 'arrowdown':
         onMove({ x: 0, y: 1 });
         break;
       case 'a':
-      case 'arrowleft':
         onMove({ x: -1, y: 0 });
         break;
       case 'd':
-      case 'arrowright':
         onMove({ x: 1, y: 0 });
         break;
       case 'e':
@@ -63,14 +59,14 @@ export function WorldMap({ world, playerPosition, onMove, onInteract }: WorldMap
   return (
     <Card className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg">{world.name}</h3>
           <Badge variant="outline" className={cn("text-xs", getBiomeColor(world.biome))}>
             {world.biome.replace('_', ' ').toUpperCase()}
           </Badge>
         </div>
         <div className="text-xs text-muted-foreground">
-          Use WASD or Arrow Keys to move, E to interact
+          Use WASD to move, E to interact
         </div>
       </div>
       
