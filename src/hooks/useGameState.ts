@@ -133,6 +133,7 @@ export function useGameState() {
           // Check if we can generate a new address
           if (newFragments >= 3) {
             const nextLevel = Object.keys(current.worlds).length + 1;
+            const atlantisAlreadyUnlocked = current.addresses.some(addr => addr.id === 'atlantis');
             
             // Generate regular worlds up to level 6 (5 new worlds)
             if (nextLevel <= 6) {
@@ -144,6 +145,19 @@ export function useGameState() {
               newFragments = 0; // Reset fragments
               levelUp = true;
               toast.success(`New address discovered: ${newAddress.name}`);
+              
+              // If this is the last regular world (level 6), unlock Atlantis
+              if (nextLevel === 6 && !atlantisAlreadyUnlocked) {
+                const atlantisAddress = {
+                  id: 'atlantis',
+                  name: 'Atlantis',
+                  symbols: ['S','U','B','P','O','H','T'],
+                  discovered: false,
+                  isEightChevron: true
+                };
+                newAddresses.push(atlantisAddress);
+                toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
+              }
             }
             // If max regular worlds reached, don't reset fragments but don't use them either
           }
@@ -226,50 +240,34 @@ export function useGameState() {
         }
       }
       
-      // Special handling for Atlantis
+      // Atlantis travel restrictions (only restrictions - not special generation)
       if (worldId === 'atlantis') {
-        // Must be on Earth to dial Atlantis
         if (current.currentWorld !== 'earth') {
           toast.error('Atlantis can only be dialed from Earth!');
           return current;
         }
         
-        // Must have ZPM to dial Atlantis
         if (!current.player.hasZPM) {
           toast.error('A ZPM is required to dial the 8-chevron address to Atlantis!');
           return current;
         }
-        
-        // Traveling to Atlantis ends the game in victory
-        toast.success('Connection established to Atlantis! Mission complete!');
-        
-        // Generate Atlantis world
-        const atlantisWorld = generateAtlantisWorld();
-        
-        return {
-          ...current,
-          currentWorld: 'atlantis',
-          worlds: {
-            ...current.worlds,
-            atlantis: atlantisWorld
-          },
-          victory: true,
-          gameOver: true
-        };
       }
       
       let targetWorld = current.worlds[worldId];
       
       // Generate world if it doesn't exist
-      if (!targetWorld && worldId !== 'earth') {
-        const level = Object.keys(current.worlds).length;
-        
-        targetWorld = generateWorld(
-          worldId, 
-          targetAddress.name, 
-          'jungle', // Default biome for generated worlds 
-          level
-        );
+      if (!targetWorld) {
+        if (worldId === 'atlantis') {
+          targetWorld = generateAtlantisWorld();
+        } else if (worldId !== 'earth') {
+          const level = Object.keys(current.worlds).length;
+          targetWorld = generateWorld(
+            worldId, 
+            targetAddress.name, 
+            'jungle', // Default biome for generated worlds 
+            level
+          );
+        }
       }
       
       if (!targetWorld) {
@@ -279,29 +277,15 @@ export function useGameState() {
       
       toast.success(`Traveled to ${targetAddress.name}`);
       
-      // Mark the world as discovered and check if all regular worlds have been visited
+      // Mark the world as discovered
       const updatedAddresses = current.addresses.map(addr => 
         addr.id === worldId ? { ...addr, discovered: true } : addr
       );
       
-      // Check if we should unlock Atlantis (all regular worlds visited + not already unlocked)
-      const regularWorldsCount = 5; // There are 5 regular worlds (excluding Earth and Atlantis)
-      const visitedRegularWorlds = updatedAddresses.filter(addr => 
-        addr.discovered && addr.id !== 'earth' && addr.id !== 'atlantis'
-      ).length;
-      
-      const atlantisAlreadyUnlocked = updatedAddresses.some(addr => addr.id === 'atlantis');
-      
-      if (visitedRegularWorlds >= regularWorldsCount && !atlantisAlreadyUnlocked) {
-        const atlantisAddress = {
-          id: 'atlantis',
-          name: 'Atlantis',
-          symbols: ['S','U','B','P','O','H','T'],
-          discovered: false,
-          isEightChevron: true
-        };
-        updatedAddresses.push(atlantisAddress);
-        toast.success('🌟 Ancient database unlocked! Atlantis address discovered!');
+      // Traveling to Atlantis ends the game in victory
+      const victory = worldId === 'atlantis';
+      if (victory) {
+        toast.success('Mission complete!');
       }
       
       return {
@@ -315,7 +299,9 @@ export function useGameState() {
           ...current.player,
           position: targetWorld.playerPosition
         },
-        addresses: updatedAddresses
+        addresses: updatedAddresses,
+        victory,
+        gameOver: victory
       };
     });
   }, [setGameState]);
@@ -360,15 +346,9 @@ export function useGameState() {
             
             toast.success(`🎮 DEBUG: Unlocked ${newAddress.name}!`);
             
-            // Check if we should unlock Atlantis (all regular worlds unlocked + not already unlocked)
-            const regularWorldsCount = 5; // There are 5 regular worlds (excluding Earth and Atlantis)
-            const availableRegularWorlds = newAddresses.filter(addr => 
-              addr.id !== 'earth' && addr.id !== 'atlantis'
-            ).length;
-            
+            // If this is the last regular world (level 6), unlock Atlantis
             const atlantisAlreadyUnlocked = newAddresses.some(addr => addr.id === 'atlantis');
-            
-            if (availableRegularWorlds >= regularWorldsCount && !atlantisAlreadyUnlocked) {
+            if (nextLevel === 6 && !atlantisAlreadyUnlocked) {
               const atlantisAddress = {
                 id: 'atlantis',
                 name: 'Atlantis',
