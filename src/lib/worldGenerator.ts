@@ -75,8 +75,11 @@ export function generateWorld(
     }
   }
 
-  // Place gate fragments
-  const fragmentCount = 2 + Math.floor(level / 2);
+  // Place gate fragments - ensure Earth has at least 3
+  let fragmentCount = 2 + Math.floor(level / 2);
+  if (biome === 'earth') {
+    fragmentCount = Math.max(3, fragmentCount); // Earth always has at least 3 fragments
+  }
   for (let i = 0; i < fragmentCount; i++) {
     const pos = findEmptyPosition(tiles, size);
     if (pos) {

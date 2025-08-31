@@ -10,12 +10,6 @@ export function createInitialGameState(): GameState {
       name: 'Earth (P3X-774)',
       symbols: ['🌍', '🌊', '🌱', '🌤️', '🏔️', '🌋'],
       discovered: true
-    },
-    {
-      id: 'abydos',
-      name: 'Abydos (P8X-873)',
-      symbols: ['🏜️', '🔺', '☀️', '💀', '🏛️', '⚱️'],
-      discovered: false
     }
   ];
   

@@ -217,14 +217,11 @@ export function useGameState() {
       // Generate world if it doesn't exist
       if (!targetWorld && worldId !== 'earth') {
         const level = Object.keys(current.worlds).length;
-        const biomeMap: Record<string, any> = {
-          'abydos': 'desert'
-        };
         
         targetWorld = generateWorld(
           worldId, 
           targetAddress.name, 
-          biomeMap[worldId] || 'jungle', 
+          'jungle', // Default biome for generated worlds 
           level
         );
       }
