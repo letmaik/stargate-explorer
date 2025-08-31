@@ -97,7 +97,7 @@ export function StargateControl({
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{address.name}</span>
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground stargate-symbols">
                       {address.symbols.join(' ')}
                     </div>
                   </div>

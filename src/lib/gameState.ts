@@ -8,7 +8,7 @@ export function createInitialGameState(): GameState {
     {
       id: 'earth',
       name: 'Earth',
-      symbols: ['🌍', '🌊', '🌱', '🌤️', '🏔️', '🌋'],
+      symbols: ['a', 'b', 'c', 'd', 'e', 'f'],
       discovered: true
     }
   ];
@@ -35,11 +35,11 @@ export function createInitialGameState(): GameState {
 
 export function generateNewWorld(level: number): { world: any; address: GateAddress } {
   const worldTemplates = [
-    { biome: 'jungle' as const, name: 'Chulak', symbols: ['🌿', '🐍', '🦋', '🌺', '🌳', '💧'] },
-    { biome: 'desert' as const, name: 'Abydos', symbols: ['🏜️', '🦂', '🌵', '🔥', '💎', '🏺'] },
-    { biome: 'arctic' as const, name: 'Kallana', symbols: ['❄️', '🐧', '⛄', '🧊', '🌨️', '🏔️'] },
-    { biome: 'volcanic' as const, name: 'Aschen', symbols: ['🌋', '🔥', '💀', '⚡', '🌪️', '🗿'] },
-    { biome: 'alien_city' as const, name: 'P3X-888', symbols: ['🏛️', '👽', '🛸', '🔮', '⚡', '🌌'] }
+    { biome: 'jungle' as const, name: 'Chulak', symbols: ['g', 'h', 'i', 'j', 'k', 'l'] },
+    { biome: 'desert' as const, name: 'Abydos', symbols: ['m', 'n', 'o', 'p', 'q', 'r'] },
+    { biome: 'arctic' as const, name: 'Kallana', symbols: ['s', 't', 'u', 'v', 'w', 'x'] },
+    { biome: 'volcanic' as const, name: 'Aschen', symbols: ['y', 'z', '1', '2', '3', '4'] },
+    { biome: 'alien_city' as const, name: 'P3X-888', symbols: ['5', '6', '7', '8', '9', '0'] }
   ];
   
   const template = worldTemplates[Math.min(level - 2, worldTemplates.length - 1)];

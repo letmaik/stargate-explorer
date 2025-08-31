@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 
+@font-face {
+  font-family: 'Stargate Glyphs';
+  src: url('https://letmaik.github.io/fonts/Stargate%20SG1%20Address%20Glyphs.ttf') format('truetype');
+  font-display: swap;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -9,6 +15,12 @@
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
+}
+
+.stargate-symbols {
+  font-family: 'Stargate Glyphs', monospace;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
 }
 
 :root {
