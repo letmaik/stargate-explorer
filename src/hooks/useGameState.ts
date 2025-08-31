@@ -150,7 +150,7 @@ export function useGameState() {
                 const atlantisAddress = {
                   id: 'atlantis',
                   name: 'Atlantis',
-                  symbols: ['!', '@', '#', '$', '%', '^', '&', '*'],
+                  symbols: ['S','U','B','P','O','H','T'],
                   discovered: true,
                   isEightChevron: true
                 };
@@ -355,7 +355,7 @@ export function useGameState() {
               const atlantisAddress = {
                 id: 'atlantis',
                 name: 'Atlantis',
-                symbols: ['!', '@', '#', '$', '%', '^', '&', '*'],
+                symbols: ['S','U','B','P','O','H','T'],
                 discovered: true,
                 isEightChevron: true
               };
