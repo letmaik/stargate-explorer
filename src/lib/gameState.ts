@@ -10,6 +10,13 @@ export function createInitialGameState(): GameState {
       name: 'Earth',
       symbols: ['🌍', '🌊', '🌱', '🌤️', '🏔️', '🌋'],
       discovered: true
+    },
+    {
+      id: 'atlantis',
+      name: 'Atlantis',
+      symbols: ['🌊', '🏛️', '🔱', '💎', '⚡', '🌌', '🔮', '🌟'],
+      discovered: true,
+      isEightChevron: true
     }
   ];
   
@@ -23,7 +30,8 @@ export function createInitialGameState(): GameState {
       supplies: 50,
       maxSupplies: 50,
       artifacts: [],
-      gateFragments: 0
+      gateFragments: 0,
+      hasZPM: false
     },
     addresses: initialAddresses,
     gameOver: false,

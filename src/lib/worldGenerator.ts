@@ -1,5 +1,54 @@
 import { World, Tile, TileType, Position } from './types';
 
+export function generateAtlantisWorld(): World {
+  const size = { width: 20, height: 15 };
+  const tiles: Tile[][] = [];
+  
+  // Initialize empty grid
+  for (let y = 0; y < size.height; y++) {
+    tiles[y] = [];
+    for (let x = 0; x < size.width; x++) {
+      tiles[y][x] = {
+        type: 'empty',
+        position: { x, y },
+        discovered: false
+      };
+    }
+  }
+  
+  // Place walls around perimeter
+  for (let x = 0; x < size.width; x++) {
+    tiles[0][x].type = 'wall';
+    tiles[size.height - 1][x].type = 'wall';
+  }
+  for (let y = 0; y < size.height; y++) {
+    tiles[y][0].type = 'wall';
+    tiles[y][size.width - 1].type = 'wall';
+  }
+  
+  // Calculate center position for gate/player
+  const centerX = Math.floor(size.width / 2);
+  const centerY = Math.floor(size.height / 2);
+  
+  // Player starts at center
+  const playerPosition = { x: centerX, y: centerY };
+  const gatePosition = { x: centerX, y: centerY };
+  
+  // Place gate at center
+  tiles[centerY][centerX].type = 'gate';
+  
+  return {
+    id: 'atlantis',
+    name: 'Atlantis',
+    biome: 'atlantis',
+    size,
+    tiles,
+    playerPosition,
+    gatePosition,
+    discovered: false
+  };
+}
+
 export function generateWorld(
   id: string, 
   name: string, 
@@ -85,6 +134,15 @@ export function generateWorld(
     if (pos) {
       tiles[pos.y][pos.x].type = 'gate_fragment';
       tiles[pos.y][pos.x].id = `fragment_${Date.now()}_${i}`;
+    }
+  }
+  
+  // Place ZPM only on Earth
+  if (biome === 'earth') {
+    const zpmPos = findEmptyPosition(tiles, size);
+    if (zpmPos) {
+      tiles[zpmPos.y][zpmPos.x].type = 'zpm';
+      tiles[zpmPos.y][zpmPos.x].id = 'zpm_earth';
     }
   }
   
@@ -202,6 +260,7 @@ export function getBiomeColor(biome: World['biome']): string {
     case 'arctic': return 'bg-blue-200';
     case 'volcanic': return 'bg-red-900';
     case 'alien_city': return 'bg-purple-900';
+    case 'atlantis': return 'bg-blue-600';
     default: return 'bg-gray-800';
   }
 }
@@ -214,6 +273,7 @@ export function getBiomeExploredColor(biome: World['biome']): string {
     case 'arctic': return 'bg-blue-200/30';
     case 'volcanic': return 'bg-red-900/30';
     case 'alien_city': return 'bg-purple-900/30';
+    case 'atlantis': return 'bg-blue-600/30';
     default: return 'bg-gray-800/30';
   }
 }
@@ -230,6 +290,7 @@ export function getTileEmoji(type: TileType): string {
     case 'gate_fragment': return '📜';
     case 'supplies': return '📦';
     case 'player': return '👤';
+    case 'zpm': return '⚡';
     default: return '';
   }
 }

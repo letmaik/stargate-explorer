@@ -13,7 +13,8 @@ export type TileType =
   | 'gate' 
   | 'player'
   | 'gate_fragment'
-  | 'supplies';
+  | 'supplies'
+  | 'zpm';
 
 export type Tile = {
   type: TileType;
@@ -26,7 +27,7 @@ export type Tile = {
 export type World = {
   id: string;
   name: string;
-  biome: 'earth' | 'jungle' | 'desert' | 'arctic' | 'volcanic' | 'alien_city';
+  biome: 'earth' | 'jungle' | 'desert' | 'arctic' | 'volcanic' | 'alien_city' | 'atlantis';
   size: { width: number; height: number };
   tiles: Tile[][];
   playerPosition: Position;
@@ -40,6 +41,7 @@ export type Player = {
   maxSupplies: number;
   artifacts: string[];
   gateFragments: number;
+  hasZPM: boolean;
 };
 
 export type GateAddress = {
@@ -47,6 +49,7 @@ export type GateAddress = {
   name: string;
   symbols: string[];
   discovered?: boolean;
+  isEightChevron?: boolean;
 };
 
 export type GameState = {

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { GameState, Position, World } from '@/lib/types';
 import { createInitialGameState, generateNewWorld } from '@/lib/gameState';
-import { generateWorld } from '@/lib/worldGenerator';
+import { generateWorld, generateAtlantisWorld } from '@/lib/worldGenerator';
 import { toast } from 'sonner';
 
 export function useGameState() {
@@ -130,17 +130,28 @@ export function useGameState() {
           toast.success('Gate fragment collected!');
           targetTile.type = 'empty'; // Remove fragment from world
           
-          // Check if we can generate a new address
+          // Check if we can generate a new address (but stop generating after reaching all worlds)
           if (newFragments >= 3) {
             const nextLevel = Object.keys(current.worlds).length + 1;
-            const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
-            
-            // Add the new address and world
-            newAddresses = [...newAddresses, newAddress];
-            current.worlds[newAddress.id] = newWorld;
-            newFragments = 0; // Reset fragments
-            levelUp = true;
-            toast.success(`New address discovered: ${newAddress.name}`);
+            if (nextLevel <= 6) { // Only generate up to 5 new worlds
+              const { world: newWorld, address: newAddress } = generateNewWorld(nextLevel);
+              
+              // Add the new address and world
+              newAddresses = [...newAddresses, newAddress];
+              current.worlds[newAddress.id] = newWorld;
+              newFragments = 0; // Reset fragments
+              levelUp = true;
+              toast.success(`New address discovered: ${newAddress.name}`);
+            }
+            // If max worlds reached, don't reset fragments but don't use them either
+          }
+          break;
+          
+        case 'zpm':
+          if (targetTile.id && !current.player.hasZPM) {
+            current.player.hasZPM = true;
+            toast.success('ZPM collected! You can now dial the 8-chevron address to Atlantis!');
+            targetTile.type = 'empty'; // Remove ZPM from world
           }
           break;
           
@@ -181,7 +192,8 @@ export function useGameState() {
           position: newPos,
           supplies: Math.max(0, newSupplies),
           artifacts: newArtifacts,
-          gateFragments: newFragments
+          gateFragments: newFragments,
+          hasZPM: current.player.hasZPM || (targetTile.type === 'zpm')
         },
         addresses: newAddresses,
         currentLevel: levelUp ? current.currentLevel + 1 : current.currentLevel,
@@ -210,6 +222,38 @@ export function useGameState() {
             return current;
           }
         }
+      }
+      
+      // Special handling for Atlantis
+      if (worldId === 'atlantis') {
+        // Must be on Earth to dial Atlantis
+        if (current.currentWorld !== 'earth') {
+          toast.error('Atlantis can only be dialed from Earth!');
+          return current;
+        }
+        
+        // Must have ZPM to dial Atlantis
+        if (!current.player.hasZPM) {
+          toast.error('A ZPM is required to dial the 8-chevron address to Atlantis!');
+          return current;
+        }
+        
+        // Traveling to Atlantis ends the game in victory
+        toast.success('Connection established to Atlantis! Mission complete!');
+        
+        // Generate Atlantis world
+        const atlantisWorld = generateAtlantisWorld();
+        
+        return {
+          ...current,
+          currentWorld: 'atlantis',
+          worlds: {
+            ...current.worlds,
+            atlantis: atlantisWorld
+          },
+          victory: true,
+          gameOver: true
+        };
       }
       
       let targetWorld = current.worlds[worldId];

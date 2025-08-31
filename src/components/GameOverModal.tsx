@@ -23,10 +23,10 @@ export function GameOverModal({ isOpen, victory, onRestart }: GameOverModalProps
             {victory ? (
               <>
                 <p className="text-lg font-semibold text-accent">
-                  You successfully retrieved the Ancient artifact!
+                  You successfully reached Atlantis!
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  The galaxy is safe thanks to your brave exploration of alien worlds through the Stargate network.
+                  Using the ZPM, you dialed the 8-chevron address and established a connection to the lost city of Atlantis. Your mission is complete!
                 </p>
               </>
             ) : (

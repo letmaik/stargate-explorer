@@ -66,9 +66,18 @@ export function StargateControl({
           </div>
         </div>
         
-        <div className="flex items-center justify-center gap-2">
-          <Scroll size={16} />
-          <span className="text-sm">Gate Fragments: {player.gateFragments}</span>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center justify-center gap-2">
+            <Scroll size={16} />
+            <span className="text-sm">Gate Fragments: {player.gateFragments}</span>
+          </div>
+          
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-sm">ZPM: </span>
+            <Badge variant={player.hasZPM ? "default" : "secondary"} className={player.hasZPM ? "bg-accent text-accent-foreground" : ""}>
+              {player.hasZPM ? "⚡ Ready" : "❌ Missing"}
+            </Badge>
+          </div>
         </div>
       </div>
       
@@ -80,28 +89,43 @@ export function StargateControl({
         </h3>
         
         <div className="space-y-2">
-          {addresses.map((address) => (
-            <div key={address.id} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-medium text-sm">{address.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {address.symbols.join(' ')}
+          {addresses.map((address) => {
+            const canDial = address.id === 'atlantis' ? 
+              (currentWorld === 'earth' && player.hasZPM && isAtGate) : 
+              isAtGate;
+            
+            const isEightChevron = address.isEightChevron;
+            
+            return (
+              <div key={address.id} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">{address.name}</span>
+                      {isEightChevron && (
+                        <Badge variant="outline" className="text-xs">
+                          8-Chevron
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {address.symbols.join(' ')}
+                    </div>
                   </div>
+                  {currentWorld !== address.id && (
+                    <Button
+                      size="sm"
+                      disabled={!canDial}
+                      onClick={() => onTravel(address.id)}
+                      className="bg-primary hover:bg-primary/90 disabled:opacity-50"
+                    >
+                      Dial
+                    </Button>
+                  )}
                 </div>
-                {currentWorld !== address.id && (
-                  <Button
-                    size="sm"
-                    disabled={!isAtGate}
-                    onClick={() => onTravel(address.id)}
-                    className="bg-primary hover:bg-primary/90 disabled:opacity-50"
-                  >
-                    Dial
-                  </Button>
-                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </Card>
